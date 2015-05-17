@@ -44,7 +44,7 @@ public enum ComputeType {
 		return binaryCode;
 	}
 
-	public ComputeType getComputeType(String aComputeStr){
+	public static ComputeType getComputeType(String aComputeStr){
 		String myCleanStr = aComputeStr.replaceAll("\\s+", "").toUpperCase();
 		for(ComputeType computeInst: ComputeType.values()){
 			if (computeInst.getInstrCode().equals(myCleanStr)) return computeInst;

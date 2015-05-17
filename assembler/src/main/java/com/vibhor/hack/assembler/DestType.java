@@ -27,7 +27,7 @@ public enum DestType {
 		return binaryCode;
 	}
 	
-	public DestType getDestType(String aDestStr){
+	public static DestType getDestType(String aDestStr){
 		String myCleanStr = aDestStr.replaceAll("\\s+", "").toUpperCase();
 		for(DestType destInst: DestType.values()){
 			if (destInst.getInstrCode().equals(myCleanStr)) return destInst;

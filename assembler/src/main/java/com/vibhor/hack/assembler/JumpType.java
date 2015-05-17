@@ -27,7 +27,7 @@ public enum JumpType {
 		return binaryCode;
 	}
 	
-	public JumpType getDestType(String aJumpStr){
+	public static JumpType getJumpType(String aJumpStr){
 		String myCleanStr = aJumpStr.replaceAll("\\s+", "").toUpperCase();
 		for(JumpType jumpInst: JumpType.values()){
 			if (jumpInst.getInstrCode().equals(myCleanStr)) return jumpInst;

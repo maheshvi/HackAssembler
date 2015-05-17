@@ -2,17 +2,22 @@ package com.vibhor.hack.assembler;
 
 public class Instruction {
 
-	private InstructionType type;
-	private int prevLineNum = -1;
+	private final InstructionType type;
+	private final int prevLineNum;
 	private final String instrCode;
+	private final boolean containsSymbol;
+	private final String symbolCode;
 	
 	public Instruction(InstructionType type, int instrLineNum, String instrCode) {
 		this.type = type;
 		this.prevLineNum = instrLineNum;
 		this.instrCode = instrCode;
+		this.containsSymbol = hasSymbol();
+		if (this.containsSymbol) this.symbolCode = this.getSymbol(); 
+		else this.symbolCode = "";
 	}
 
-	public boolean hasSymbol(){
+	private boolean hasSymbol(){
 		switch(type){
 		case C_INSTRUCTION:
 			return false;
@@ -31,7 +36,7 @@ public class Instruction {
 		else return selSubStr;
 	}
 	
-	public String getSymbol(){
+	private String getSymbol(){
 		if (!hasSymbol()) return null;
 		switch(type){
 		case LOOP_LABEL:
@@ -47,4 +52,27 @@ public class Instruction {
 	private String getLoopLabel(){
 		return instrCode.substring(instrCode.indexOf("(")+1,instrCode.indexOf(")"));
 	}
+	
+	public boolean isContainingSymbol(){
+		return this.containsSymbol;
+	}
+
+	public InstructionType getType() {
+		return type;
+	}
+
+	public int getPrevLineNum() {
+		return prevLineNum;
+	}
+
+	public String getInstrCode() {
+		return instrCode;
+	}
+
+	public String getSymbolCode() {
+		return symbolCode;
+	}
+	
+	
+	
 }

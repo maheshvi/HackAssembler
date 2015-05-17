@@ -3,4 +3,12 @@
   <groupId>com.vibhor.hack</groupId>
   <artifactId>assembler</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.0</version>
+	</dependency>
+  	
+  </dependencies>
 </project>
