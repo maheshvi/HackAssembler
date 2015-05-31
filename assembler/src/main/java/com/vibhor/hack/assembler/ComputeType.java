@@ -23,6 +23,8 @@ public enum ComputeType {
 	D_PLUS_M("D+M", "1000010"),
 	D_MINUS_A("D-A", "0010011"),
 	D_MINUS_M("D-M", "1010011"),
+	A_MINUS_D("A-D", "0000111"),
+	M_MINUS_D("M-D", "1000111"),
 	D_AND_A("D&A", "0000000"),
 	D_AND_M("D&M", "1000000"),
 	D_OR_A("D|A", "0010101"),

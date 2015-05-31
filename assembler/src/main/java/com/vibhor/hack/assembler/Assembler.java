@@ -1,9 +1,11 @@
 package com.vibhor.hack.assembler;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,13 +52,26 @@ public class Assembler extends JFrame {
 		}
 		Parser myParser = new Parser();
 		myAssembler.generateInstructions(br, myParser);
-		myAssembler.generateSymbolTables(myParser);
+		
+		String myFilePath = chooser.getSelectedFile().getAbsolutePath();
+		myFilePath = myFilePath.substring(0, myFilePath.indexOf(".asm"))+".hack";
+		try{
+			File file = new File(myFilePath);
+			file.createNewFile();
+		FileWriter fw = new FileWriter(file);
+		BufferedWriter bw = new BufferedWriter(fw);
+		
+		myAssembler.generateSymbolTables(myParser, bw);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
 	}
 
 	public Assembler() {
-		super("File Chooser Test Frame");
-		setSize(350, 200);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+//		super("File Chooser Test Frame");
+//		setSize(350, 200);
+//		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 	}
 
@@ -94,7 +109,7 @@ public class Assembler extends JFrame {
 		}
 	}
 
-	private void generateSymbolTables(Parser aParser) {
+	private void generateSymbolTables(Parser aParser, BufferedWriter bw) throws IOException {
 		// Pre-fill all predefined symbols
 		for (PreDefinedSymbolTypes symbolType : PreDefinedSymbolTypes.values()) {
 			memAddrSymbolMap
@@ -120,7 +135,11 @@ public class Assembler extends JFrame {
 			}
 			System.out.println("Bin Code for [" + myInstr.getInstrCode()
 					+ "]  ==> [" + binaryCode + "]");
+			bw.write(binaryCode);
+			bw.newLine();
 		}
+		
+		bw.close();
 	}
 
 }
