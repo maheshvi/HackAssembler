@@ -1,5 +1,12 @@
 package urp;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PositionalCubeList {
@@ -94,16 +101,16 @@ public class PositionalCubeList {
 		for (int k = 0; k < varCount; k++) {
 			if (!((posCount[k] == 0) || (negCount[k] == 0))) {
 				if (posCount[k] + negCount[k] == myPresence) {
-					if (myVarPos == 0){
-						myVarPos = k+1;
+					if (myVarPos == 0) {
+						myVarPos = k + 1;
 					}
 					if (Math.abs(posCount[k] - negCount[k]) < myDiff) {
 						myDiff = Math.abs(posCount[k] - negCount[k]);
 						myVarPos = k + 1;
 					}
-					
-				}else if(posCount[k] + negCount[k] > myPresence){
-					myVarPos = k+1;
+
+				} else if (posCount[k] + negCount[k] > myPresence) {
+					myVarPos = k + 1;
 					myPresence = posCount[k] + negCount[k];
 					myDiff = Math.abs(posCount[k] - negCount[k]);
 				}
@@ -169,12 +176,16 @@ public class PositionalCubeList {
 		return this;
 	}
 
+	public PositionalCubeList and(PositionalCubeList aCubeList){
+		return this.invert().or(aCubeList.invert()).invert();
+	}
+	
 	public PositionalCubeList invert() {
 		PositionalCubeList myRes = new PositionalCubeList(varCount);
 		if (isEmptyCubeList()) {
 			myRes.insertPositionalCube(new PositionalCube(varCount));
 			return myRes;
-		} else if (hasUnitPositionalCube())
+		} else if (hasUnitPositionalCube() || isComplementAdditiveSatisfied())
 			return myRes;
 		else if (cubeListSize() == 1)
 			return cubeList.get(0).invert();
@@ -182,8 +193,8 @@ public class PositionalCubeList {
 			int myVarNum = getMostBinateVarNum();
 			if (myVarNum == 0)
 				myVarNum = getMostSpreadUnate();
-			return getPosCoFactor(myVarNum).invert().and(myVarNum, true).or(
-					getNegCoFactor(myVarNum).invert().and(myVarNum, false));
+			return getPosCoFactor(myVarNum).invert().and(myVarNum, true)
+					.or(getNegCoFactor(myVarNum).invert().and(myVarNum, false));
 		}
 	}
 
@@ -238,4 +249,70 @@ public class PositionalCubeList {
 			return false;
 		return true;
 	}
+
+	public static PositionalCubeList parsePcnFile(String aAbsoluteFilePath) {
+
+		PositionalCubeList myRes = null;
+		BufferedReader aPcnFile;
+		int myVarCount;
+		try {
+			aPcnFile = new BufferedReader(new FileReader(new File(
+					aAbsoluteFilePath)));
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to read file");
+			e.printStackTrace();
+			return null;
+		}
+
+		String line;
+		try {
+			line = aPcnFile.readLine();
+			if ((line == null) || (line.isEmpty())){
+				aPcnFile.close();
+				return null;}
+			myVarCount = Integer.parseInt(cleanStr2Parse(line));
+			myRes = new PositionalCubeList(myVarCount);
+
+			line = aPcnFile.readLine();
+			if ((line == null) || (line.isEmpty())){
+				aPcnFile.close();
+				return myRes;
+			}
+			long myCubeCount = Long.parseLong(cleanStr2Parse(line));
+			PositionalCube pc;
+			for (long k = 0; k < myCubeCount; k++) {
+				line = aPcnFile.readLine();
+				pc = new PositionalCube(myVarCount);
+				pc.parsePositionalCube(line);
+				myRes.insertPositionalCube(pc);
+			}
+			aPcnFile.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return myRes;
+	}
+
+	private static String cleanStr2Parse(String dirtyStr2Parse) {
+		return dirtyStr2Parse.trim().replaceAll(" +", " ");
+	}
+	
+	public void writeToFile(String aAbsoluteFilePath){
+		try{
+			File file = new File(aAbsoluteFilePath);
+			file.createNewFile();
+		FileWriter fw = new FileWriter(file);
+		BufferedWriter bw = new BufferedWriter(fw);
+		
+		bw.write(this.toString());
+		bw.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}				
+	}
+
+	
+	
 }
