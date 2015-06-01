@@ -1,6 +1,9 @@
 package urp;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -127,9 +130,85 @@ public class PositionalCubeTest {
 	}
 
 	@Test
-	public void testisUnit() {
+	public void testIsUnit() {
+		PositionalCube pc = new PositionalCube(5);
+		assertTrue(pc.isUnit());
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("2 2 -5");
+		assertFalse(pc.isUnit());
+		
+		pc = new PositionalCube(5);
+		pc.setVarValAtpos(1, PositionalCube.DONT_CARE_VAR);
+		pc.setVarValAtpos(2, PositionalCube.DONT_CARE_VAR);
+		pc.setVarValAtpos(4, PositionalCube.DONT_CARE_VAR);
+		assertTrue(pc.isUnit());
 		
 	}
+	
+	@Test
+	public void testIsSingleVar() {
+		PositionalCube pc = new PositionalCube(5);
+		assertFalse(pc.isSingleVarOnly());
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 2");
+		assertTrue(pc.isSingleVarOnly());
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 -4");
+		assertTrue(pc.isSingleVarOnly());
+		
+		pc = new PositionalCube(5);
+		pc.setVarValAtpos(1, PositionalCube.NORM_VAR);
+		pc.setVarValAtpos(5, PositionalCube.COMPLIMENT_VAR);
+		assertFalse(pc.isSingleVarOnly());
+		
+	}
+	
+	@Test
+	public void testGetSingleVarSignedNum() {
+		PositionalCube pc = new PositionalCube(5);
+		assertEquals(0, pc.getSingleVarSignedNum());
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 2");
+		assertEquals(2, pc.getSingleVarSignedNum());
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 -4");
+		assertEquals(-4, pc.getSingleVarSignedNum());
+		
+		pc = new PositionalCube(5);
+		pc.setVarValAtpos(1, PositionalCube.NORM_VAR);
+		pc.setVarValAtpos(5, PositionalCube.COMPLIMENT_VAR);
+		assertEquals(0, pc.getSingleVarSignedNum());
+		
+	}	
+	
+	@Test
+	public void testAnd() {
+		PositionalCube pc = new PositionalCube(5);
+		pc.parsePositionalCube("2 2 -5   ");
+
+		PositionalCube myRes = pc.and(3, true);
+		PositionalCube myExpRes = new PositionalCube(5);
+		myExpRes.parsePositionalCube("3 2 3 -5");
+		assertEquals(myExpRes, myRes);
+
+		myRes = pc.and(3, false);
+		myExpRes = new PositionalCube(5);
+		myExpRes.parsePositionalCube("3 2 -3 -5");
+		assertEquals(myExpRes, myRes);
+		
+		myRes = pc.and(2, false);
+		assertEquals(null, myRes);
+		
+		myRes = pc.and(2, true);
+		myExpRes = new PositionalCube(5);
+		myExpRes.parsePositionalCube("2 2 -5");
+		assertEquals(myExpRes, myRes);
+	}		
 
 	@Test
 	public void testGetPosCoFactor() {
@@ -169,4 +248,54 @@ public class PositionalCubeTest {
 		assertNull(myResPc);
 	}
 
+	@Test
+	public void testInvert() {
+		PositionalCube pc = new PositionalCube(5);
+		assertEquals(null, pc.invert());
+		
+		PositionalCube p1,p2,p3;
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("2 2 -5   ");		
+		PositionalCubeList myExpRes = new PositionalCubeList(5);
+		p1 = new PositionalCube(5);
+		p1.parsePositionalCube("1 -2");
+		p2 = new PositionalCube(5);
+		p2.parsePositionalCube("1 5");
+		myExpRes.insertPositionalCube(p1);
+		myExpRes.insertPositionalCube(p2);
+		assertEquals(myExpRes, pc.invert());
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 3");		
+		myExpRes = new PositionalCubeList(5);
+		p1 = new PositionalCube(5);
+		p1.parsePositionalCube("1 -3");
+		myExpRes.insertPositionalCube(p1);
+		assertEquals(myExpRes, pc.invert());	
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 -4");		
+		myExpRes = new PositionalCubeList(5);
+		p1 = new PositionalCube(5);
+		p1.parsePositionalCube("1 4");
+		myExpRes.insertPositionalCube(p1);
+		assertEquals(myExpRes, pc.invert());		
+		
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("3 2 -4 -5");		
+		myExpRes = new PositionalCubeList(5);
+		p1 = new PositionalCube(5);
+		p1.parsePositionalCube("1 -2");
+		p2 = new PositionalCube(5);
+		p2.parsePositionalCube("1 4");
+		p3 = new PositionalCube(5);
+		p3.parsePositionalCube("1 5");
+		myExpRes.insertPositionalCube(p1);
+		myExpRes.insertPositionalCube(p2);
+		myExpRes.insertPositionalCube(p3);
+		assertEquals(myExpRes, pc.invert());		
+		
+	}		
+	
 }

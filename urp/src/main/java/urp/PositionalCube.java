@@ -194,9 +194,7 @@ public class PositionalCube {
 		}
 	}
 	
-	
-
-	@Override
+		@Override
 	public String toString() {
 		String myRes = ""; //varCount + " ";
 		byte myValValue;

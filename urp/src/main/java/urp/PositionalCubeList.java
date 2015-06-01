@@ -32,9 +32,9 @@ public class PositionalCubeList {
 		int myVarVal, mySingleVarPosition;
 		for (int k = 0; k < varCount; k++) {
 			myVarVal = aPosCube.getVarValAtPos(k + 1);
-			if (myVarVal == 1)
+			if (myVarVal == PositionalCube.NORM_VAR)
 				posCount[k] = posCount[k] + 1;
-			else if (myVarVal == 2)
+			else if (myVarVal == PositionalCube.COMPLIMENT_VAR)
 				negCount[k] = negCount[k] + 1;
 			if (aPosCube.isSingleVarOnly()) {
 				mySingleVarPosition = aPosCube.getSingleVarSignedNum();
@@ -88,12 +88,24 @@ public class PositionalCubeList {
 	}
 
 	public int getMostBinateVarNum() {
-		int myDiff = cubeList.size(), myVarPos = 0;
+		long myDiff = cubeList.size();
+		int myVarPos = 0;
+		long myPresence = 0;
 		for (int k = 0; k < varCount; k++) {
 			if (!((posCount[k] == 0) || (negCount[k] == 0))) {
-				if (Math.abs(posCount[k] - negCount[k]) < myDiff) {
-					myDiff = (int) Math.abs(posCount[k] - negCount[k]);
-					myVarPos = k + 1;
+				if (posCount[k] + negCount[k] == myPresence) {
+					if (myVarPos == 0){
+						myVarPos = k+1;
+					}
+					if (Math.abs(posCount[k] - negCount[k]) < myDiff) {
+						myDiff = Math.abs(posCount[k] - negCount[k]);
+						myVarPos = k + 1;
+					}
+					
+				}else if(posCount[k] + negCount[k] > myPresence){
+					myVarPos = k+1;
+					myPresence = posCount[k] + negCount[k];
+					myDiff = Math.abs(posCount[k] - negCount[k]);
 				}
 			}
 		}
@@ -115,7 +127,7 @@ public class PositionalCubeList {
 
 	public boolean isComplementAdditiveSatisfied() {
 		for (int k = 0; k < varCount; k++) {
-			if (singleVarPos[k] == singleVarNeg[k])
+			if ((singleVarPos[k]) && (singleVarNeg[k]))
 				return true;
 		}
 		return false;
@@ -174,15 +186,15 @@ public class PositionalCubeList {
 					getNegCoFactor(myVarNum).invert().and(myVarNum, false));
 		}
 	}
-	
+
 	@Override
-	public String toString(){
-		String myRes = varCount+ "\n" + cubeListSize() + "\n";
+	public String toString() {
+		String myRes = varCount + "\n" + cubeListSize() + "\n";
 		for (PositionalCube myPositionalCube : cubeList) {
-			myRes = myRes +  myPositionalCube.toString() + "\n";
+			myRes = myRes + myPositionalCube.toString() + "\n";
 		}
 		return myRes;
-		
+
 	}
 
 	public ArrayList<PositionalCube> getCubeList() {
@@ -226,7 +238,4 @@ public class PositionalCubeList {
 			return false;
 		return true;
 	}
-	
-	
-
 }
