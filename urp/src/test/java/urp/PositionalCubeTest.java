@@ -127,8 +127,8 @@ public class PositionalCubeTest {
 	}
 
 	@Test
-	public void testNOTGetPosCoFactor() {
-		// fail("Not yet implemented");
+	public void testisUnit() {
+		
 	}
 
 	@Test
