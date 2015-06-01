@@ -182,7 +182,7 @@ public class PositionalCubeList {
 			int myVarNum = getMostBinateVarNum();
 			if (myVarNum == 0)
 				myVarNum = getMostSpreadUnate();
-			return getPosCoFactor(myVarNum).and(myVarNum, true).or(
+			return getPosCoFactor(myVarNum).invert().and(myVarNum, true).or(
 					getNegCoFactor(myVarNum).invert().and(myVarNum, false));
 		}
 	}
