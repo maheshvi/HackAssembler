@@ -54,6 +54,13 @@ public class PositionalCubeListTest {
 		
 		myExpRes = new PositionalCubeList(3);
 		assertEquals(myExpRes, list.getPosCoFactor(1));
+		
+		list = new PositionalCubeList(3);
+		list.insertPositionalCube(new PositionalCube(3, 0b111101));
+		
+		myExpRes = new PositionalCubeList(3);
+		myExpRes.insertPositionalCube(new PositionalCube(3, 0b111111));
+		assertEquals(myExpRes, list.getPosCoFactor(1));
 	}	
 	
 	@Test
@@ -288,7 +295,7 @@ public class PositionalCubeListTest {
 		list.insertPositionalCube(new PositionalCube(3, 0b01_11_01));
 		list.insertPositionalCube(new PositionalCube(3, 0b10_10_01));
 		list.insertPositionalCube(new PositionalCube(3, 0b11_11_10));
-		System.out.println(list);
+//		System.out.println(list);
 		assertTrue(list.isTautology());
 	}
 
@@ -305,13 +312,85 @@ public class PositionalCubeListTest {
 		list.insertPositionalCube(pc);
 
 		pc = new PositionalCube(5);
-		pc.parsePositionalCube("1 -3 -4");
+		pc.parsePositionalCube("2 -3 -4");
 		list.insertPositionalCube(pc);
 		
-		System.out.println(list);
-		System.out.println(" == INVERSION ==");
-		System.out.println(list.invert());
+	
+		PositionalCubeList myRes = new PositionalCubeList(5);
+		PositionalCube myResPc;
+
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("3 1 -2 3");
+		myRes.insertPositionalCube(myResPc);
+
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("3 1 3 -4");
+		myRes.insertPositionalCube(myResPc);
+
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("5 -1 2 3 -4 -5");
+		myRes.insertPositionalCube(myResPc);
+		
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("4 -1 -2 3 -5");
+		myRes.insertPositionalCube(myResPc);
+
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("3 1 -3 4");
+		myRes.insertPositionalCube(myResPc);
+		
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("4 -1 -3 4 -5");
+		myRes.insertPositionalCube(myResPc);
+		
+		assertEquals(myRes, list.invert());
+//		System.out.println(list);
+//		System.out.println(" == INVERSION ==");
+//		System.out.println(list.invert());
 	}
+
+	@Test
+	public void testUnateInversion() {
+		PositionalCubeList list = new PositionalCubeList(5);
+		PositionalCube pc;
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("3 2 3 4");
+		list.insertPositionalCube(pc);
+
+//		pc = new PositionalCube(5);
+//		pc.parsePositionalCube("2 -1 5");
+//		list.insertPositionalCube(pc);
+
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("2 3 -1");
+		list.insertPositionalCube(pc);
+		
+	
+		PositionalCubeList myRes = new PositionalCubeList(5);
+		PositionalCube myResPc;
+
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("3 1 -2 3");
+		myRes.insertPositionalCube(myResPc);
+
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("3 1 3 -4");
+		myRes.insertPositionalCube(myResPc);
+		
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("1 -3");
+		myRes.insertPositionalCube(myResPc);
+		
+//		System.out.println(list);
+//		System.out.println(" == INVERSION ==");
+//		System.out.println(list.invert());
+//		System.out.println(" == EXPECTED ==");
+//		System.out.println(myRes);
+		
+		assertEquals(myRes, list.invert());
+
+	}
+	
 	
 	@Test
 	public void testSingleSumInversion() {
@@ -325,13 +404,21 @@ public class PositionalCubeListTest {
 		pc.parsePositionalCube("1 3");
 		list.insertPositionalCube(pc);
 
-//		pc = new PositionalCube(5);
-//		pc.parsePositionalCube("1 -3 -4");
-//		list.insertPositionalCube(pc);
+		pc = new PositionalCube(5);
+		pc.parsePositionalCube("1 -4");
+		list.insertPositionalCube(pc);
 		
-		System.out.println(list);
-		System.out.println(" == INVERSION ==");
-		System.out.println(list.invert());
+		PositionalCubeList myRes = new PositionalCubeList(5);
+		PositionalCube myResPc;
+		myResPc = new PositionalCube(5);
+		myResPc.parsePositionalCube("3 -1 -3 4");
+		myRes.insertPositionalCube(myResPc);
+
+		assertEquals(myRes, list.invert());
+		
+//		System.out.println(list);
+//		System.out.println(" == INVERSION ==");
+//		System.out.println(list.invert());
 	}
 
 	@Test

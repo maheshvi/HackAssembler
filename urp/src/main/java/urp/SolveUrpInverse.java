@@ -27,8 +27,10 @@ public class SolveUrpInverse extends JFrame  {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Positional Cube Files", "pcn");
 		chooser.setFileFilter(filter);
+//		chooser.setCurrentDirectory(new File(
+//				"E:\\ProgrammingAssignment1Files\\UnateRecursiveComplement"));
 		chooser.setCurrentDirectory(new File(
-				"E:\\ProgrammingAssignment1Files\\UnateRecursiveComplement"));
+		"C:\\Vibhor's Dropbox\\Dropbox\\Personal\\Coursera\\VLSI cad 2 layout\\ProgrammingAssignment1Files\\UnateRecursiveComplement"));
 		
 		SolveUrpInverse mySolveUrpInverse = new SolveUrpInverse();
 		

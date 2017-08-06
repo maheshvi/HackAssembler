@@ -23,6 +23,13 @@ public class PositionalCube {
 		this.mask = (1 << (2 * varCount)) - 1;
 		this.value = aValue;
 	}
+	
+	public PositionalCube clone(){
+		PositionalCube myRes = new PositionalCube(varCount);
+		myRes.setValue(value);
+		return myRes;
+	}
+	
 
 	public void parsePositionalCube(String aStr2Parse) {
 		String myCleanStr = cleanStr2Parse(aStr2Parse);
@@ -60,10 +67,10 @@ public class PositionalCube {
 			for (int k = 0; k < myLen; k++) {
 				myCubeVal = Math.abs(aProdVars[k]);
 				if (Math.signum(aProdVars[k]) > 0) {
-					myRes = (myRes & ~(COVER_VAR << 2 * (myCubeVal - 1)))
+					myRes = (myRes & ~(COVER_VAR << (2 * (myCubeVal - 1))))
 							| (NORM_VAR << (2 * (myCubeVal - 1)));
 				} else {
-					myRes = (myRes & ~(COVER_VAR << 2 * (myCubeVal - 1)))
+					myRes = (myRes & ~(COVER_VAR << (2 * (myCubeVal - 1))))
 							| (COMPLIMENT_VAR << (2 * (myCubeVal - 1)));
 				}
 			}

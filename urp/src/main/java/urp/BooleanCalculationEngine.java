@@ -19,7 +19,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class BooleanCalculationEngine extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static final String FOLDER_PATH = "E:\\ProgrammingAssignment1Files\\BooleanCalculatorEngine";
+//	private static final String FOLDER_PATH = "E:\\ProgrammingAssignment1Files\\BooleanCalculatorEngine";
+	private static final String FOLDER_PATH = "C:\\Vibhor's Dropbox\\Dropbox\\Personal\\Coursera\\VLSI cad 2 layout\\ProgrammingAssignment1Files\\BooleanCalculatorEngine";
 	private PositionalCubeList[] cubeListArr = new PositionalCubeList[20];
 
 	public static void main(String[] args) {

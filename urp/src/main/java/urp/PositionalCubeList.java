@@ -62,6 +62,10 @@ public class PositionalCubeList {
 			if (myPosCoFactor != null)
 				myRes.insertPositionalCube(myPosCoFactor);
 		}
+		if (myRes.hasUnitPositionalCube()){
+			myRes = new PositionalCubeList(varCount);
+			myRes.insertPositionalCube(new PositionalCube(varCount));
+		}
 		return myRes;
 	}
 
@@ -72,6 +76,10 @@ public class PositionalCubeList {
 			myNegCoFactor = myPositionalCube.getNegCoFactor(aVarNum);
 			if (myNegCoFactor != null)
 				myRes.insertPositionalCube(myNegCoFactor);
+		}
+		if (myRes.hasUnitPositionalCube()){
+			myRes = new PositionalCubeList(varCount);
+			myRes.insertPositionalCube(new PositionalCube(varCount));
 		}
 		return myRes;
 	}
@@ -158,22 +166,36 @@ public class PositionalCubeList {
 
 	public PositionalCubeList and(int aVarNum, boolean aVarValue) {
 		PositionalCubeList myRes = new PositionalCubeList(varCount);
+		if (this.isEmptyCubeList()) return myRes;
 		PositionalCube myAndedPosCube;
 		for (PositionalCube myPositionalCube : cubeList) {
 			myAndedPosCube = myPositionalCube.and(aVarNum, aVarValue);
 			if (myAndedPosCube != null)
-				myRes.insertPositionalCube(myAndedPosCube);
+				myRes.insertPositionalCube(myAndedPosCube.clone());
 		}
 		return myRes;
 
 	}
 
 	public PositionalCubeList or(PositionalCubeList aCubeList) {
+		PositionalCubeList myRes = this.clone();
 		for (PositionalCube myPositionalCube : aCubeList.getCubeList()) {
 			if (myPositionalCube != null)
-				this.insertPositionalCube(myPositionalCube);
+			{
+				myRes.insertPositionalCube(myPositionalCube.clone());
+			}
 		}
-		return this;
+		return myRes;
+	}
+	
+	public PositionalCubeList clone(){
+		PositionalCubeList myRes = new PositionalCubeList(varCount);
+		if (isEmptyCubeList()) return myRes;
+		for(int i=0; i< cubeListSize(); i++)
+		{	myRes.insertPositionalCube(cubeList.get(i).clone());
+		}
+		
+		return myRes;
 	}
 
 	public PositionalCubeList and(PositionalCubeList aCubeList){
